@@ -22,25 +22,20 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserEntity>> allView() {
-        List<UserEntity> users = userService.findAllUser();
-
-        // 사용자 목록이 비어 있는지 확인
+    public ResponseEntity<List<UserEntity>> getAllUsers() {
+        List<UserEntity> users = userService.findAllUsers();
         if (users.isEmpty()) {
             return ResponseEntity.status(404)
                     .header("message", "등록된 유저가 없습니다.")
                     .build();
         }
-
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserEntity> detailView(@PathVariable Integer id) {
+    public ResponseEntity<UserEntity> getUserById(@PathVariable Integer id) {
         try {
             Optional<UserEntity> getUser = userService.findUserById(id);
-
-            // 유저의 id가 유효할 경우 실행하는 로직
             if (getUser.isPresent()) {
                 return ResponseEntity.ok(getUser.get());
             } else {
@@ -55,28 +50,37 @@ public class UserController {
         }
     }
 
-    @PostMapping("/creat")
-    public ResponseEntity<UserEntity> creat(@RequestBody UserDTO user) {
+    @PostMapping("/create")
+    public ResponseEntity<UserEntity> createUser(@RequestBody UserDTO userDto) {
         try {
-            UserEntity userEntity = UserEntity.builder()
-                    .userName(user.getUserName())
-                    .userAge(user.getUserAge())
-                    .addressPost(user.getAddressPost())
-                    .addressDefault(user.getAddressDefault())
-                    .addressDetail(user.getAddressDetail())
-                    .build();
-
-            Optional<UserEntity> savedUser = userService.saveUser(userEntity);
-
+            Optional<UserEntity> savedUser = userService.saveUser(userDto);
             if (savedUser.isPresent()) {
                 return ResponseEntity.ok(savedUser.get());
             } else {
-                return ResponseEntity.status(500).header("message", "유저 저장에 실패했습니다.").build();
+                return ResponseEntity.status(500)
+                        .header("message", "유저 저장에 실패했습니다.")
+                        .build();
             }
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).header("message", e.getMessage()).build();
+            return ResponseEntity.status(400)
+                    .header("message", e.getMessage())
+                    .build();
         }
     }
 
-
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserEntity> updateUser(@PathVariable Integer id, @RequestBody UserDTO userDto) {
+        try {
+            UserEntity updatedUser = userService.updateUser(id, userDto);
+            return ResponseEntity.ok(updatedUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400)
+                    .header("message", e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .header("message", "유저 업데이트에 실패했습니다.")
+                    .build();
+        }
+    }
 }
