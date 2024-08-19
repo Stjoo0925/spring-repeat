@@ -139,4 +139,36 @@ public class UserEntity {
                 ", userUpdateAt=" + userUpdateAt +
                 '}';
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public Integer getUserAge() {
+        return userAge;
+    }
+
+    public String getAddressPost() {
+        return addressPost;
+    }
+
+    public String getAddressDefault() {
+        return addressDefault;
+    }
+
+    public String getAddressDetail() {
+        return addressDetail;
+    }
+
+    public LocalDateTime getUserCreateAt() {
+        return userCreateAt;
+    }
+
+    public LocalDateTime getUserUpdateAt() {
+        return userUpdateAt;
+    }
 }
