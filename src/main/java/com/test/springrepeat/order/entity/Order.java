@@ -1,37 +1,40 @@
 package com.test.springrepeat.order.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "repeat/order")
+@Table(name = "repeat_order")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order-id")
+    @Column(name = "order_id")
     private Integer orderId;
 
-    @Column(name = "order-name")
+    @Column(name = "order_name")
     private String orderName;
 
-    @Column(name = "order-price")
+    @Column(name = "order_price")
     private Integer orderPrice;
 
-    @Column(name = "order-quantity")
+    @Column(name = "order_quantity")
     private Integer orderQuantity;
 
-    @Column(name = "order-create-at")
-    private String orderCreateAt;
+    @CreationTimestamp
+    @Column(name = "order_create_at")
+    private LocalDateTime orderCreateAt;
 
-    @Column(name = "order-update-at")
-    private String orderUpdateAt;
-
-    @Column(name = "order-delete-at")
-    private String orderDeleteAt;
+    @UpdateTimestamp
+    @Column(name = "order_update_at")
+    private LocalDateTime orderUpdateAt;
 
     public Order() {
     }
 
-    private Order(Integer orderId, String orderName, Integer orderPrice, Integer orderQuantity, String orderCreateAt, String orderUpdateAt, String orderDeleteAt) {
+    private Order(Integer orderId, String orderName, Integer orderPrice, Integer orderQuantity, LocalDateTime orderCreateAt, LocalDateTime orderUpdateAt) {
 
         this.orderId = orderId;
         this.orderName = orderName;
@@ -39,7 +42,6 @@ public class Order {
         this.orderQuantity = orderQuantity;
         this.orderCreateAt = orderCreateAt;
         this.orderUpdateAt = orderUpdateAt;
-        this.orderDeleteAt = orderDeleteAt;
     }
     public static  Order builder(){
         return new Order();
@@ -65,22 +67,19 @@ public class Order {
         return this;
     }
 
-    public Order orderCreateAt(String orderCreateAt) {
+    public Order orderCreateAt(LocalDateTime orderCreateAt) {
         this.orderCreateAt = orderCreateAt;
         return this;
     }
 
-    public Order orderUpdateAt(String orderUpdateAt) {
+    public Order orderUpdateAt(LocalDateTime orderUpdateAt) {
         this.orderUpdateAt = orderUpdateAt;
         return this;
     }
 
-    public Order orderDeleteAt(String orderDeleteAt) {
-        this.orderDeleteAt = orderDeleteAt;
-        return this;
-    }
+
     public Order build(){
-        return new Order(orderId,orderName,orderPrice,orderQuantity,orderCreateAt,orderUpdateAt,orderDeleteAt);
+        return new Order(orderId,orderName,orderPrice,orderQuantity,orderCreateAt,orderUpdateAt);
     }
 
     @Override
@@ -92,7 +91,7 @@ public class Order {
                 ", orderQuantity=" + orderQuantity +
                 ", orderCreateAt='" + orderCreateAt + '\'' +
                 ", orderUpdateAt='" + orderUpdateAt + '\'' +
-                ", orderDeleteAt='" + orderDeleteAt + '\'' +
+
                 '}';
     }
  }
