@@ -35,7 +35,7 @@ public class UserEntity {
     @Column(name = "user_delete_at")
     private LocalDateTime userDeleteAt;
 
-    public UserEntity(Integer id, String userName, Integer userAge, String addressPost, String addressDefault, String addressDetail, LocalDateTime userCreateAt, LocalDateTime userUpdateAt, LocalDateTime userDeleteAt) {
+    private UserEntity(Integer id, String userName, Integer userAge, String addressPost, String addressDefault, String addressDetail, LocalDateTime userCreateAt, LocalDateTime userUpdateAt, LocalDateTime userDeleteAt) {
         this.id = id;
         this.userName = userName;
         this.userAge = userAge;
@@ -48,7 +48,10 @@ public class UserEntity {
     }
 
     public UserEntity() {
+    }
 
+    public static UserEntity builder(){
+        return new UserEntity();
     }
 
 
@@ -63,6 +66,10 @@ public class UserEntity {
     }
 
     public UserEntity userAge(Integer userAge) {
+        if(userAge < 20){
+
+            return null;
+        }
         this.userAge = userAge;
         return this;
     }
