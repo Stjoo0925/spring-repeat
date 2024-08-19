@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserEntity>> findAllUser() {
+    public ResponseEntity<List<UserEntity>> allview() {
         List<UserEntity> users = userService.findAllUser();
 
         // 사용자 목록이 비어 있는지 확인
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/id")
-    public ResponseEntity<UserEntity> findByUserId(@RequestBody Integer id) {
+    public ResponseEntity<UserEntity> detailview(@RequestBody Integer id) {
         // 서비스에서 검증 및 조회 로직 처리
         try {
             Optional<UserEntity> getUser = userService.findUserById(id);
