@@ -1,13 +1,11 @@
 package com.test.springrepeat.user.controller;
 
 import com.test.springrepeat.user.entity.UserEntity;
+import com.test.springrepeat.user.model.UserDTO;
 import com.test.springrepeat.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,4 +55,29 @@ public class UserController {
                     .build();
         }
     }
+
+    @PostMapping("/creat")
+    public ResponseEntity<UserEntity> creat(@RequestBody UserDTO user) {
+        try {
+            // UserEntity 객체를 빌더 패턴을 통해 생성
+            UserEntity userEntity = UserEntity.builder()
+                    .userName(user.getUserName())
+                    .userAge(user.getUserAge())
+                    .addressPost(user.getAddressPost())
+                    .addressDefault(user.getAddressDefault())
+                    .addressDetail(user.getAddressDetail())
+                    .build();
+
+            Optional<UserEntity> savedUser = userService.saveUser(userEntity);
+
+            if (savedUser.isPresent()) {
+                return ResponseEntity.ok(savedUser.get());
+            } else {
+                return ResponseEntity.status(500).header("message", "유저 저장에 실패했습니다.").build();
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).header("message", e.getMessage()).build();
+        }
+    }
+
 }
