@@ -53,8 +53,10 @@ public class UserService {
 
     @Transactional
     public UserEntity updateUser(Integer id, UserDTO userDto) {
-        UserEntity findUser = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 유저를 찾을 수 없습니다."));
+        UserEntity findUser = userRepository.findById(id).orElse(null);
+        if (findUser == null) {
+            throw new IllegalArgumentException("해당 ID의 유저를 찾을 수 없습니다.");
+        }
 
         UserEntity updatedUser = UserEntity.builder()
                 .id(findUser.getId())
@@ -69,6 +71,15 @@ public class UserService {
 
         validateUser(updatedUser);
         return userRepository.save(updatedUser);
+    }
+
+    @Transactional
+    public void deleteUser(Integer id) {
+        UserEntity findUser = userRepository.findById(id).orElse(null);
+        if (findUser == null) {
+            throw new IllegalArgumentException("해당 ID의 유저를 찾을 수 없습니다.");
+        }
+        userRepository.delete(findUser);
     }
 
     private void validateUser(UserEntity userEntity) {

@@ -83,4 +83,20 @@ public class UserController {
                     .build();
         }
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400)
+                    .header("message", e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .header("message", "유저 삭제에 실패했습니다.")
+                    .build();
+        }
+    }
 }
