@@ -78,6 +78,9 @@ public class UserEntity {
         }
 
         public Builder userName(String userName) {
+            if (userName == null || !userName.matches("^[가-힣]{3}$")) {
+                throw new IllegalArgumentException("이름은 반드시 3글자의 한글이어야 합니다.");
+            }
             this.userName = userName;
             return this;
         }
@@ -91,6 +94,9 @@ public class UserEntity {
         }
 
         public Builder addressPost(String addressPost) {
+            if (addressPost == null || !addressPost.matches("\\d{5}")) {
+                throw new IllegalArgumentException("우편번호는 5자리 숫자여야 합니다.");
+            }
             this.addressPost = addressPost;
             return this;
         }
