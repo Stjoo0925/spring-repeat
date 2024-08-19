@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -19,5 +20,13 @@ public class UserService {
 
     public List<UserEntity> findAllUser() {
         return userRepository.findAll();
+    }
+
+    public Optional<UserEntity> findUserById(Integer id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID는 0보다 커야 합니다.");
+        }
+
+        return userRepository.findById(id);
     }
 }
