@@ -22,7 +22,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserEntity>> allview() {
+    public ResponseEntity<List<UserEntity>> allView() {
         List<UserEntity> users = userService.findAllUser();
 
         // 사용자 목록이 비어 있는지 확인
@@ -35,9 +35,8 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/id")
-    public ResponseEntity<UserEntity> detailview(@RequestBody Integer id) {
-        // 서비스에서 검증 및 조회 로직 처리
+    @GetMapping("/{id}")
+    public ResponseEntity<UserEntity> detailView(@PathVariable Integer id) {
         try {
             Optional<UserEntity> getUser = userService.findUserById(id);
 
@@ -59,7 +58,6 @@ public class UserController {
     @PostMapping("/creat")
     public ResponseEntity<UserEntity> creat(@RequestBody UserDTO user) {
         try {
-            // UserEntity 객체를 빌더 패턴을 통해 생성
             UserEntity userEntity = UserEntity.builder()
                     .userName(user.getUserName())
                     .userAge(user.getUserAge())
@@ -79,5 +77,6 @@ public class UserController {
             return ResponseEntity.status(400).header("message", e.getMessage()).build();
         }
     }
+
 
 }

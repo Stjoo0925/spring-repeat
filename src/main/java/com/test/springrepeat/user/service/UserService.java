@@ -4,6 +4,7 @@ import com.test.springrepeat.user.entity.UserEntity;
 import com.test.springrepeat.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +19,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public List<UserEntity> findAllUser() {
         return userRepository.findAll();
     }
 
+    @Transactional
     public Optional<UserEntity> findUserById(Integer id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID는 0보다 커야 합니다.");
@@ -30,8 +33,8 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    @Transactional
     public Optional<UserEntity> saveUser(UserEntity userEntity) {
-        // 유효성 검증 로직 (필요에 따라 추가)
         if (userEntity.getUserName() == null || userEntity.getUserName().length() != 3) {
             throw new IllegalArgumentException("이름은 3글자여야 합니다.");
         }
@@ -42,10 +45,8 @@ public class UserService {
             throw new IllegalArgumentException("우편번호는 5자리 숫자여야 합니다.");
         }
 
-        // 데이터베이스에 UserEntity 저장
         UserEntity savedUser = userRepository.save(userEntity);
 
-        // Optional로 반환
         return Optional.of(savedUser);
     }
 }
