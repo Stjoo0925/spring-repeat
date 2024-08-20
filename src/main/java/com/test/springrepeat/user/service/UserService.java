@@ -89,6 +89,14 @@ public class UserService {
         validateUser(updatedUser);
         return userRepository.save(updatedUser);
     }
-
+    //삭제
+    @Transactional
+    public void deleteUser(Integer id) {
+        UserEntity findUser = userRepository.findById(id).orElse(null);
+        if (findUser == null) {
+            throw new IllegalArgumentException("해당 ID의 유저를 찾을 수 없습니다.");
+        }
+        userRepository.delete(findUser);
+    }
 }
 

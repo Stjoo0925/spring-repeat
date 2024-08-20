@@ -16,17 +16,17 @@ import java.util.Optional;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService Service;
+    private final UserService service;
 
     @Autowired
     public UserController(UserService Service) {
-        this.Service = Service;
+        this.service = Service;
     }
 
     //전체조회
     @GetMapping
     public ResponseEntity<List<UserEntity>> getAllUser(){
-        List<UserEntity> user = Service.findAllUser();
+        List<UserEntity> user = service.findAllUser();
         if(user.isEmpty()){
             return ResponseEntity.status(404)
                     .header("message","등록된 유저가 없습니다.")
@@ -38,7 +38,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserEntity> getUserById(@PathVariable Integer id) {
         try {
-            Optional<UserEntity> getUser = Service.findUserById(id);
+            Optional<UserEntity> getUser = service.findUserById(id);
             return getUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(404)
                     .header("message", "조회한 유저의 데이터가 없습니다.")
                     .build());
@@ -52,7 +52,7 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<UserEntity> createUser(@RequestBody UserDTO userDto) {
         try {
-            Optional<UserEntity> savedUser = Service.saveUser(userDto);
+            Optional<UserEntity> savedUser = service.saveUser(userDto);
             if (savedUser.isPresent()) {
                 return ResponseEntity.ok(savedUser.get());
             } else {
@@ -70,7 +70,7 @@ public class UserController {
     @PutMapping("/update/{id}")
     public ResponseEntity<UserEntity> updateUser(@PathVariable Integer id, @RequestBody UserDTO userDto) {
         try {
-            UserEntity updatedUser = Service.updateUser(id, userDto);
+            UserEntity updatedUser = service.updateUser(id, userDto);
             return ResponseEntity.ok(updatedUser);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(400)
@@ -79,6 +79,22 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(500)
                     .header("message", "유저 업데이트에 실패했습니다.")
+                    .build();
+        }
+    }
+    //삭제
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+        try {
+            service.deleteUser(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400)
+                    .header("message", e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .header("message", "유저 삭제에 실패했습니다.")
                     .build();
         }
     }
