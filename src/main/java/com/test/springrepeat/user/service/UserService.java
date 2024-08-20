@@ -67,5 +67,28 @@ public class UserService {
             throw new IllegalArgumentException("우편번호는 5자리 숫자여야 합니다.");
         }
     }
+    //수정
+    @Transactional
+    public UserEntity updateUser(Integer id, UserDTO userDto) {
+        UserEntity findUser = userRepository.findById(id).orElse(null);
+        if (findUser == null) {
+            throw new IllegalArgumentException("해당 ID의 유저를 찾을 수 없습니다.");
+        }
+
+        UserEntity updatedUser = UserEntity.builder()
+                .id(findUser.getId())
+                .userName(userDto.getUserName() != null ? userDto.getUserName() : findUser.getUserName())
+                .userAge(userDto.getUserAge() != null ? userDto.getUserAge() : findUser.getUserAge())
+                .addressPost(userDto.getAddressPost() != null ? userDto.getAddressPost() : findUser.getAddressPost())
+                .addressDefault(userDto.getAddressDefault() != null ? userDto.getAddressDefault() : findUser.getAddressDefault())
+                .addressDetail(userDto.getAddressDetail() != null ? userDto.getAddressDetail() : findUser.getAddressDetail())
+                .userCreateAt(findUser.getUserCreateAt())
+                .userUpdateAt(LocalDateTime.now())
+                .build();
+
+        validateUser(updatedUser);
+        return userRepository.save(updatedUser);
+    }
+
 }
 

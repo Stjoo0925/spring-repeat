@@ -66,4 +66,20 @@ public class UserController {
                     .build();
         }
     }
+    //수정
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserEntity> updateUser(@PathVariable Integer id, @RequestBody UserDTO userDto) {
+        try {
+            UserEntity updatedUser = Service.updateUser(id, userDto);
+            return ResponseEntity.ok(updatedUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400)
+                    .header("message", e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .header("message", "유저 업데이트에 실패했습니다.")
+                    .build();
+        }
+    }
 }
