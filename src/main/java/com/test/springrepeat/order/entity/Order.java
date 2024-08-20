@@ -2,6 +2,7 @@ package com.test.springrepeat.order.entity;
 
 import jakarta.persistence.*;
 
+
 @Entity
 @Table(name = "repeat/order")
 public class Order {
@@ -27,11 +28,12 @@ public class Order {
 
     @Column(name = "order-delete-at")
     private String orderDeleteAt;
-
+  
     public Order() {
     }
 
-    private Order(Integer orderId, String orderName, Integer orderPrice, Integer orderQuantity, String orderCreateAt, String orderUpdateAt, String orderDeleteAt) {
+
+    private Order(Integer orderId, String orderName, Integer orderPrice, Integer orderQuantity, String orderCreateAt, String orderUpdateAt, String orderDeleteAt) 
 
         this.orderId = orderId;
         this.orderName = orderName;
@@ -39,8 +41,8 @@ public class Order {
         this.orderQuantity = orderQuantity;
         this.orderCreateAt = orderCreateAt;
         this.orderUpdateAt = orderUpdateAt;
-        this.orderDeleteAt = orderDeleteAt;
     }
+
     public static  Order builder(){
         return new Order();
     }
@@ -65,15 +67,18 @@ public class Order {
         return this;
     }
 
+
     public Order orderCreateAt(String orderCreateAt) {
         this.orderCreateAt = orderCreateAt;
         return this;
     }
 
+
     public Order orderUpdateAt(String orderUpdateAt) {
         this.orderUpdateAt = orderUpdateAt;
         return this;
     }
+
 
     public Order orderDeleteAt(String orderDeleteAt) {
         this.orderDeleteAt = orderDeleteAt;
@@ -92,7 +97,6 @@ public class Order {
                 ", orderQuantity=" + orderQuantity +
                 ", orderCreateAt='" + orderCreateAt + '\'' +
                 ", orderUpdateAt='" + orderUpdateAt + '\'' +
-                ", orderDeleteAt='" + orderDeleteAt + '\'' +
                 '}';
     }
  }

@@ -91,5 +91,4 @@ public class OrderDTO {
                 ", orderDeleteAt='" + orderDeleteAt + '\'' +
                 '}';
     }
-
 }
