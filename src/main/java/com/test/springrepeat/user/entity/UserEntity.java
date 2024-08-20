@@ -22,13 +22,13 @@ public class UserEntity {
     @Column(name = "user_ageaddress_post")
     private String addressPost;
 
-    @Column(name = "user_address_default", nullable = false)
+    @Column(name = "user_address_default")
     private String addressDefault;
 
-    @Column(name = "user_address_detail", nullable = false )
+    @Column(name = "user_address_detail" )
     private String addressDetail;
 
-    @Column(name = "user_create_at",  nullable = false)
+    @Column(name = "user_create_at")
     private LocalDateTime userCreateAt;
 
     @Column(name = "user_update_at")
@@ -129,6 +129,19 @@ public class UserEntity {
         return this;
     }
 
-
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", userAge=" + userAge +
+                ", addressPost='" + addressPost + '\'' +
+                ", addressDefault='" + addressDefault + '\'' +
+                ", addressDetail='" + addressDetail + '\'' +
+                ", userCreateAt=" + userCreateAt +
+                ", userUpdateAt=" + userUpdateAt +
+                ", userDeleteAt=" + userDeleteAt +
+                '}';
+    }
 }
 
