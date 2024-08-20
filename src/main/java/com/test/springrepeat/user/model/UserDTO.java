@@ -1,9 +1,5 @@
 package com.test.springrepeat.user.model;
 
-import jakarta.persistence.Column;
-
-import java.time.LocalDateTime;
-
 public class UserDTO {
 
 

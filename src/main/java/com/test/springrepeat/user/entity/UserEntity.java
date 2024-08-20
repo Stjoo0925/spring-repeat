@@ -2,6 +2,7 @@ package com.test.springrepeat.user.entity;
 
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,13 +1,12 @@
 package com.test.springrepeat.order.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
+
 @Entity
-@Table(name = "repeat_order")
+@Table(name = "repeat/order")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +22,9 @@ public class Order {
     @Column(name = "order_quantity")
     private Integer orderQuantity;
 
-    @CreationTimestamp
     @Column(name = "order_create_at")
     private LocalDateTime orderCreateAt;
 
-    @UpdateTimestamp
     @Column(name = "order_update_at")
     private LocalDateTime orderUpdateAt;
 
@@ -43,6 +40,8 @@ public class Order {
         this.orderCreateAt = orderCreateAt;
         this.orderUpdateAt = orderUpdateAt;
     }
+
+
     public static  Order builder(){
         return new Order();
     }
@@ -67,16 +66,17 @@ public class Order {
         return this;
     }
 
+
     public Order orderCreateAt(LocalDateTime orderCreateAt) {
         this.orderCreateAt = orderCreateAt;
         return this;
     }
 
+
     public Order orderUpdateAt(LocalDateTime orderUpdateAt) {
         this.orderUpdateAt = orderUpdateAt;
         return this;
     }
-
 
     public Order build(){
         return new Order(orderId,orderName,orderPrice,orderQuantity,orderCreateAt,orderUpdateAt);
@@ -91,7 +91,30 @@ public class Order {
                 ", orderQuantity=" + orderQuantity +
                 ", orderCreateAt='" + orderCreateAt + '\'' +
                 ", orderUpdateAt='" + orderUpdateAt + '\'' +
-
                 '}';
     }
- }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public String getOrderName() {
+        return orderName;
+    }
+
+    public Integer getOrderPrice() {
+        return orderPrice;
+    }
+
+    public Integer getOrderQuantity() {
+        return orderQuantity;
+    }
+
+    public LocalDateTime getOrderCreateAt() {
+        return orderCreateAt;
+    }
+
+    public LocalDateTime getOrderUpdateAt() {
+        return orderUpdateAt;
+    }
+}
