@@ -1,133 +1,135 @@
 package com.test.springrepeat.user.entity;
 
-
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Entity
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private final Integer id;
 
     @Column(name = "user_name")
-    private String userName;
+    private final String userName;
 
     @Column(name = "user_age")
-    private Integer userAge;
+    private final Integer userAge;
 
     @Column(name = "user_ageaddress_post")
-    private String addressPost;
+    private final String addressPost;
 
     @Column(name = "user_address_default")
-    private String addressDefault;
+    private final String addressDefault;
 
-    @Column(name = "user_address_detail" )
-    private String addressDetail;
+    @Column(name = "user_address_detail")
+    private final String addressDetail;
 
     @Column(name = "user_create_at")
-    private LocalDateTime userCreateAt;
+    @CreationTimestamp
+    private final LocalDateTime userCreateAt;
 
     @Column(name = "user_update_at")
-    private LocalDateTime userUpdateAt;
+    @UpdateTimestamp
+    private final LocalDateTime userUpdateAt;
 
-    @Column(name = "user_delete_at")
-    private LocalDateTime userDeleteAt;
-
-    private UserEntity(Integer id, String userName, Integer userAge, String addressPost, String addressDefault, String addressDetail, LocalDateTime userCreateAt, LocalDateTime userUpdateAt, LocalDateTime userDeleteAt) {
-        this.id = id;
-        this.userName = userName;
-        this.userAge = userAge;
-        this.addressPost = addressPost;
-        this.addressDefault = addressDefault;
-        this.addressDetail = addressDetail;
-        this.userCreateAt = userCreateAt;
-        this.userUpdateAt = userUpdateAt;
-        this.userDeleteAt = userDeleteAt;
+    protected UserEntity() {
+        this.id = null;
+        this.userName = null;
+        this.userAge = null;
+        this.addressPost = null;
+        this.addressDefault = null;
+        this.addressDetail = null;
+        this.userCreateAt = null;
+        this.userUpdateAt = null;
     }
 
-    public UserEntity() {
+    private UserEntity(Builder builder) {
+        this.id = builder.id;
+        this.userName = builder.userName;
+        this.userAge = builder.userAge;
+        this.addressPost = builder.addressPost;
+        this.addressDefault = builder.addressDefault;
+        this.addressDetail = builder.addressDetail;
+        this.userCreateAt = builder.userCreateAt;
+        this.userUpdateAt = builder.userUpdateAt;
     }
 
-    public static UserEntity builder(){
-        return new UserEntity();
+    public static Builder builder() {
+        return new Builder();
     }
 
+    public static class Builder {
+        private Integer id;
+        private String userName;
+        private Integer userAge;
+        private String addressPost;
+        private String addressDefault;
+        private String addressDetail;
+        private LocalDateTime userCreateAt;
+        private LocalDateTime userUpdateAt;
 
-    public UserEntity id(Integer id) {
-        this.id = id;
-        return this;
-    }
+        public Builder id(Integer id) {
+            this.id = id;
+            return this;
+        }
 
-
-    public UserEntity userName(String userName) {
-        Pattern p = Pattern.compile("^[가-힣]{3}$");
-
-        Matcher m = p.matcher(userName);
-        if(m.matches()){
+        public Builder userName(String userName) {
+            if (userName == null || !userName.matches("^[가-힣]{3}$")) {
+                throw new IllegalArgumentException("이름은 한글로만 이루어져야하며 3글자 합니다.");
+            }
             this.userName = userName;
             return this;
-        }else {
-           throw new IllegalArgumentException("[경고]성명은 공백이 없는 한글로만 이루어져야 하며 3글자로만 되어져야 합니다.");
         }
-    }
 
-    public UserEntity userAge(Integer userAge) {
-        if(userAge >= 20){
+        public Builder userAge(Integer userAge) {
+            if (userAge < 20) {
+                throw new IllegalArgumentException("회원의 나이는 20살 이상이여야 합니다.");
+            }
             this.userAge = userAge;
             return this;
-        }else {
-            throw new IllegalArgumentException("20살 보다 작습니다.");
         }
-    }
 
-    public UserEntity addressPost(String addressPost) {
-        Pattern p = Pattern.compile("^[0-4]*$");
-
-        Matcher m = p.matcher(addressPost);
-
-        if(m.matches()){
+        public Builder addressPost(String addressPost) {
+            if (addressPost == null || !addressPost.matches("\\d{5}")) {
+                throw new IllegalArgumentException("우편번호는 5자리 숫자여야 합니다.");
+            }
             this.addressPost = addressPost;
-
-        }else {
-            throw new IllegalArgumentException("[경고]숫자는 5자리 숫자 까지만 가능합니다.");
+            return this;
         }
-        return this;
-    }
 
-    public UserEntity addressDefault(String addressDefault) {
-        if(addressDefault == null){
-            throw new IllegalArgumentException("기본주소는 생략 할 수 없습니다.");
+        public Builder addressDefault(String addressDefault) {
+            if(addressDefault==null){
+                throw new IllegalArgumentException("기본 주소는 생략 할 수 없습니다.");
+            }
+            this.addressDefault = addressDefault;
+            return this;
         }
-        this.addressDefault = addressDefault;
-        return this;
-    }
 
-    public UserEntity addressDetail(String addressDetail) {
-        if(addressDetail==null){
-            throw new IllegalArgumentException("기본 주소는 삭제 할 수 없습니다.");
+        public Builder addressDetail(String addressDetail) {
+            if(addressDefault==null){
+                throw new IllegalArgumentException("기본 주소는 삭제 할 수 없습니다.");
+            }
+            this.addressDetail = addressDetail;
+            return this;
         }
-        this.addressDetail = addressDetail;
-        return this;
-    }
 
-    public UserEntity userCreateAt(LocalDateTime userCreateAt) {
-        this.userCreateAt = userCreateAt;
-        return this;
-    }
+        public Builder userCreateAt(LocalDateTime userCreateAt) {
+            this.userCreateAt = userCreateAt;
+            return this;
+        }
 
-    public UserEntity userUpdateAt(LocalDateTime userUpdateAt) {
-        this.userUpdateAt = userUpdateAt;
-        return this;
-    }
+        public Builder userUpdateAt(LocalDateTime userUpdateAt) {
+            this.userUpdateAt = userUpdateAt;
+            return this;
+        }
 
-    public UserEntity userDeleteAt(LocalDateTime userDeleteAt) {
-        this.userDeleteAt = userDeleteAt;
-        return this;
+        public UserEntity build() {
+            return new UserEntity(this);
+        }
     }
 
     @Override
@@ -141,8 +143,38 @@ public class UserEntity {
                 ", addressDetail='" + addressDetail + '\'' +
                 ", userCreateAt=" + userCreateAt +
                 ", userUpdateAt=" + userUpdateAt +
-                ", userDeleteAt=" + userDeleteAt +
                 '}';
     }
-}
 
+    public Integer getId() {
+        return id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public Integer getUserAge() {
+        return userAge;
+    }
+
+    public String getAddressPost() {
+        return addressPost;
+    }
+
+    public String getAddressDefault() {
+        return addressDefault;
+    }
+
+    public String getAddressDetail() {
+        return addressDetail;
+    }
+
+    public LocalDateTime getUserCreateAt() {
+        return userCreateAt;
+    }
+
+    public LocalDateTime getUserUpdateAt() {
+        return userUpdateAt;
+    }
+}
