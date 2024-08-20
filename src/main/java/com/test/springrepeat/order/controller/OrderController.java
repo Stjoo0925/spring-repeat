@@ -48,4 +48,22 @@ public class OrderController {
                     .build();
         }
     }
+    @PostMapping("/creat")
+    public ResponseEntity<Order>createOrder(@RequestBody OrderDTO orderDTO){
+        try {
+            Optional<Order> saveOrder = orderService.saveOrder(orderDTO);
+            if (saveOrder.isPresent()){
+                return ResponseEntity.ok(saveOrder.get());
+            }else {
+                return ResponseEntity.status(500)
+                        .header("message", "주문저장이 실패되었습니다.")
+                        .build();
+            }
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(400)
+                    .header("message",e.getMessage())
+                    .build();
+        }
+    }
+
 }
