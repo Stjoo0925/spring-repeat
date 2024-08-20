@@ -3,14 +3,15 @@ package com.test.springrepeat.user.controller;
 
 import com.test.springrepeat.user.entity.UserEntity;
 import com.test.springrepeat.user.service.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
@@ -34,7 +35,20 @@ public class UserController {
         }
         return ResponseEntity.ok(user);
     }
-
+    //상세 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<UserEntity> getUserById(@PathVariable Integer id) {
+        try {
+            Optional<UserEntity> getUser = Service.findUserById(id);
+            return getUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(404)
+                    .header("message", "조회한 유저의 데이터가 없습니다.")
+                    .build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400)
+                    .header("message", e.getMessage())
+                    .build();
+        }
+    }
 
 
 
