@@ -49,7 +49,7 @@ public class OrderController {
         }
     }
     // 등록
-    @PostMapping("/creat")
+    @PostMapping("/create")
     public ResponseEntity<Order>createOrder(@RequestBody OrderDTO orderDTO){
         try {
             Optional<Order> saveOrder = orderService.saveOrder(orderDTO);
@@ -78,6 +78,21 @@ public class OrderController {
         }catch (Exception e){
             return ResponseEntity.status(500)
                     .header("mssage","주문 정보가 업데이트 되었습니다.")
+                    .build();
+        }
+    }
+    @DeleteMapping("/delete/{orderId}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Integer orderId){
+        try {
+            orderService.deleteOrder(orderId);
+            return ResponseEntity.noContent().build();
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(400)
+                    .header("message",e.getMessage())
+                    .build();
+        }catch (Exception e){
+            return ResponseEntity.status(500)
+                    .header("message","주문 삭제에 실패했습니다.")
                     .build();
         }
     }
