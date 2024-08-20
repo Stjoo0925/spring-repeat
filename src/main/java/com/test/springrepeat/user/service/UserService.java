@@ -3,12 +3,14 @@ package com.test.springrepeat.user.service;
 
 import com.test.springrepeat.user.entity.UserEntity;
 
+import com.test.springrepeat.user.model.UserDTO;
 import com.test.springrepeat.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +38,34 @@ public class UserService {
             throw new IllegalArgumentException("ID는 0보다 커야 합니다.");
         }
         return userRepository.findById(id);
+    }
+    //등록
+    @Transactional
+    public Optional<UserEntity> saveUser(UserDTO userDTO) {
+        UserEntity userEntity = UserEntity.builder()
+                .userName(userDTO.getUserName())
+                .userAge(userDTO.getUserAge())
+                .addressPost(userDTO.getAddressPost())
+                .addressDefault(userDTO.getAddressDefault())
+                .addressDetail(userDTO.getAddressDetail())
+                .userCreateAt(LocalDateTime.now())
+                .userUpdateAt(LocalDateTime.now())
+                .build();
+
+        validateUser(userEntity);
+        UserEntity savedUser = userRepository.save(userEntity);
+        return Optional.of(savedUser);
+    }
+    private void validateUser(UserEntity userEntity) {
+        if (userEntity.getUserName() == null || userEntity.getUserName().length() != 3) {
+            throw new IllegalArgumentException("이름은 3글자여야 합니다.");
+        }
+        if (userEntity.getUserAge() == null || userEntity.getUserAge() < 20) {
+            throw new IllegalArgumentException("회원의 나이는 20살 이상이어야 합니다.");
+        }
+        if (userEntity.getAddressPost() == null || !userEntity.getAddressPost().matches("\\d{5}")) {
+            throw new IllegalArgumentException("우편번호는 5자리 숫자여야 합니다.");
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.test.springrepeat.user.model;
 
+import java.time.LocalDateTime;
 
 public class UserDTO {
 
