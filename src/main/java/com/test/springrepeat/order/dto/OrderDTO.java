@@ -1,13 +1,14 @@
 package com.test.springrepeat.order.dto;
 
+import java.time.LocalDateTime;
+
 public class OrderDTO {
     private Integer  orderId;
     private String orderName;
     private Integer orderPrice;
     private Integer orderQuantity;
-    private String orderCreateAt;
-    private String orderUpdateAt;
-    private String orderDeleteAt;
+    private LocalDateTime orderCreateAt;
+    private LocalDateTime orderUpdateAt;
 
     public OrderDTO() {
     }
@@ -44,31 +45,23 @@ public class OrderDTO {
         this.orderQuantity = orderQuantity;
     }
 
-    public String getOrderCreateAt() {
+    public LocalDateTime getOrderCreateAt() {
         return orderCreateAt;
     }
 
-    public void setOrderCreateAt(String orderCreateAt) {
+    public void setOrderCreateAt(LocalDateTime orderCreateAt) {
         this.orderCreateAt = orderCreateAt;
     }
 
-    public String getOrderUpdateAt() {
+    public LocalDateTime getOrderUpdateAt() {
         return orderUpdateAt;
     }
 
-    public void setOrderUpdateAt(String orderUpdateAt) {
+    public void setOrderUpdateAt(LocalDateTime orderUpdateAt) {
         this.orderUpdateAt = orderUpdateAt;
     }
 
-    public String getOrderDeleteAt() {
-        return orderDeleteAt;
-    }
-
-    public void setOrderDeleteAt(String orderDeleteAt) {
-        this.orderDeleteAt = orderDeleteAt;
-    }
-
-    public OrderDTO(Integer orderId, String orderName, Integer orderPrice, Integer orderQuantity, String orderCreateAt, String orderUpdateAt, String orderDeleteAt) {
+    public OrderDTO(Integer orderId, String orderName, Integer orderPrice, Integer orderQuantity, LocalDateTime orderCreateAt, LocalDateTime orderUpdateAt) {
 
         this.orderId = orderId;
         this.orderName = orderName;
@@ -76,7 +69,6 @@ public class OrderDTO {
         this.orderQuantity = orderQuantity;
         this.orderCreateAt = orderCreateAt;
         this.orderUpdateAt = orderUpdateAt;
-        this.orderDeleteAt = orderDeleteAt;
     }
 
     @Override
@@ -88,7 +80,6 @@ public class OrderDTO {
                 ", orderQuantity=" + orderQuantity +
                 ", orderCreateAt='" + orderCreateAt + '\'' +
                 ", orderUpdateAt='" + orderUpdateAt + '\'' +
-                ", orderDeleteAt='" + orderDeleteAt + '\'' +
                 '}';
     }
 }

@@ -20,6 +20,7 @@ public class OrderService {
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
+
     @Transactional
     public List<Order> findAllOrders(){
         return orderRepository.findAll();
@@ -32,4 +33,28 @@ public class OrderService {
         return orderRepository.findById(orderId);
     }
 
+    @Transactional
+    public Optional<Order> saveOrder(OrderDTO orderDTO){
+        Order order = Order.builder()
+                .orderName(orderDTO.getOrderName())
+                .orderPrice(orderDTO.getOrderPrice())
+                .orderQuantity(orderDTO.getOrderQuantity())
+                .orderCreateAt(LocalDateTime.now())
+                .build();
+        validateOrder(order);
+        Order saveOrder = orderRepository.save(order);
+        return Optional.of(saveOrder);
+    }
+    private void validateOrder(Order order) {
+        if (order.getOrderName() == null) {
+            throw new IllegalArgumentException("상품의 이름은 생략될 수 없습니다.");
+        }
+        if (order.getOrderPrice() == null || order.getOrderPrice() < 0) {
+            throw new IllegalArgumentException("상품의 가격은 음수가 될 수 없습니다.");
+        }
+        if (order.getOrderQuantity() == null || order.getOrderQuantity() <0){
+            throw new IllegalArgumentException("상품의 수량은 음수가 될 수 없습니다.");
+
+        }
+    }
 }
