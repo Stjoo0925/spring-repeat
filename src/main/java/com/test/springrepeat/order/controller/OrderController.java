@@ -30,11 +30,11 @@ public class OrderController {
                     .build();
         }return ResponseEntity.ok(orders);
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Order>getOrderById(@PathVariable Integer OrderId){
+    // 조회
+    @GetMapping("/{orderId}")
+    public ResponseEntity<Order>getOrderById(@PathVariable Integer orderId){
         try {
-            Optional<Order> getOrder = orderService.findOrderById(OrderId);
+            Optional<Order> getOrder = orderService.findOrderById(orderId);
             if (getOrder.isPresent()) {
                 return ResponseEntity.ok(getOrder.get());
             } else {
@@ -48,6 +48,7 @@ public class OrderController {
                     .build();
         }
     }
+    // 등록
     @PostMapping("/creat")
     public ResponseEntity<Order>createOrder(@RequestBody OrderDTO orderDTO){
         try {
@@ -65,5 +66,21 @@ public class OrderController {
                     .build();
         }
     }
+    @PutMapping("/update/{orderId}")
+    public ResponseEntity<Order> updateOrder(@PathVariable Integer orderId, @RequestBody OrderDTO orderDTO){
+        try {
+            Order updateOrder = orderService.updateOrder(orderId,orderDTO);
+            return ResponseEntity.ok(updateOrder);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(400)
+                    .header("message",e.getMessage())
+                    .build();
+        }catch (Exception e){
+            return ResponseEntity.status(500)
+                    .header("mssage","주문 정보가 업데이트 되었습니다.")
+                    .build();
+        }
+    }
+
 
 }

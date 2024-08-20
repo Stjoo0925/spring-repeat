@@ -45,6 +45,32 @@ public class OrderService {
         Order saveOrder = orderRepository.save(order);
         return Optional.of(saveOrder);
     }
+
+    @Transactional
+    public Order updateOrder(Integer OrderId, OrderDTO orderDTO){
+        Order findOrder = orderRepository.findById(OrderId).orElse(null);
+        if (findOrder == null){
+            throw new IllegalArgumentException("해당 상품을 찾을 수 없습니다.");
+        }
+        Order updateOrder = Order.builder()
+                .orderName(orderDTO.getOrderName() != null ? orderDTO.getOrderName() : findOrder.getOrderName())
+                .orderQuantity(orderDTO.getOrderQuantity() != null ? orderDTO.getOrderQuantity() : findOrder.getOrderQuantity())
+                .orderPrice(orderDTO.getOrderPrice() != null ? orderDTO.getOrderPrice() : findOrder.getOrderPrice())
+                .orderCreateAt(findOrder.getOrderCreateAt())
+                .orderUpdateAt(LocalDateTime.now())
+                .build();
+        validateOrder(updateOrder);
+        return orderRepository.save(updateOrder);
+    }
+
+
+
+
+
+
+
+
+
     private void validateOrder(Order order) {
         if (order.getOrderName() == null) {
             throw new IllegalArgumentException("상품의 이름은 생략될 수 없습니다.");
